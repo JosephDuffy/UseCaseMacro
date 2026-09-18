@@ -39,7 +39,9 @@ let package = Package(
         .macro(
             name: "UseCaseMacroMacros",
             dependencies: [
-                "UseCaseMacroFoundation",
+                // This is used in UseCaseMacro but it's not needed to compile and adding it
+                // prevents the prebuilt SwiftSyntax from being used.
+//                "UseCaseMacroFoundation",
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
                 .product(name: "SwiftDiagnostics", package: "swift-syntax"),
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
@@ -57,10 +59,17 @@ let package = Package(
                 ),
             ]
         ),
+        // I usually put API tests in with the main test target but then it depends on
+        // UseCaseMacro and UseCaseMacroFoundation, which prevents the prebuilt SwiftSyntax from
+        // being used.
+        .testTarget(
+            name: "UseCaseMacroAPITests",
+            dependencies: ["UseCaseMacro"],
+            swiftSettings: [.enableExperimentalFeature("StrictConcurrency")]
+        ),
         .testTarget(
             name: "UseCaseMacroTests",
             dependencies: [
-                "UseCaseMacro",
                 "UseCaseMacroMacros",
                 .product(name: "MacroTesting", package: "swift-macro-testing"),
                 .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
