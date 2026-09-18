@@ -5,11 +5,11 @@ import Testing
 
 @Suite(
     .macros(
-        record: .never,
-        macros: [
+        [
             UseCaseMacro.self,
             UseCaseCallMacro.self,
-        ]
+        ],
+        record: .never,
     )
 )
 struct UseCaseMacroDiagnosticsTests {
